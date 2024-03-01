@@ -1,0 +1,34 @@
+{
+  "name": "webper",
+  "version": "1.0.0",
+  "description": "A image converter to .webp format with resizer",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx electronmon ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SliskiPlumek/webper.git"
+  },
+  "keywords": [
+    "webp",
+    "converter",
+    "image",
+    "resize",
+    "resizer",
+    "img"
+  ],
+  "author": "Hubert Śliwiński",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SliskiPlumek/webper/issues"
+  },
+  "homepage": "https://github.com/SliskiPlumek/webper#readme",
+  "devDependencies": {
+    "electron": "^29.1.0"
+  },
+  "dependencies": {
+    "resize-img": "^2.0.0"
+  }
+}
