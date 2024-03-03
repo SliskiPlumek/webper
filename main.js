@@ -1,12 +1,13 @@
 const path = require("node:path");
-const { app, BrowserWindow, Menu, ipcMain, shell } = require("electron");
 const os = require("os");
+const fs = require("fs");
+const { app, BrowserWindow, Menu, ipcMain, shell } = require("electron");
 const resizeImg = require("resize-img");
 
 const isMac = process.platform === "darwin";
-const isDev = process.env !== "production"
+const isDev = process.env !== "production";
 
-let mainWindow
+let mainWindow;
 
 function createMainWindow() {
   mainWindow = new BrowserWindow({
@@ -16,43 +17,48 @@ function createMainWindow() {
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: true,
-      preload: path.join(__dirname, "preload.js")
+      preload: path.join(__dirname, "preload.js"),
     },
-  })
+  });
 
-  mainWindow.webContents.on('will-navigate', (event, url) => {
-    const route = (new URL(url)).pathname
-    console.log(route);
-
-    // switch(route) {
-    //   case '/resize':
-    //     console.log('accessing /resize');
-    //   break
-    //   case '/convert':
-    //     mainWindow.loadFile(path.join(__dirname, "./client/views/convert.html"))
-    // }
-  })
-
-  if(isDev) {
-    mainWindow.webContents.openDevTools()
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
   }
 
-  mainWindow.loadFile(path.join(__dirname, "./client/views/index.html"))
+  mainWindow.loadFile(path.join(__dirname, "./client/views/index.html"));
 }
 
 app.whenReady().then(() => {
-  createMainWindow()
+  createMainWindow();
 
+  
   // const mainMenu = Menu.buildFromTemplate(menu)
-
-  mainWindow.on('closed', () => (mainWindow = null))
-
+  
+  mainWindow.on("closed", () => (mainWindow = null));
+  
   app.on("activate", () => {
-    if(BrowserWindow.getAllWindows().length === 0) {
-      createMainWindow()
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createMainWindow();
     }
-  })
-})
+  });
+});
+
+ipcMain.on("select-service", (event, service) => {
+  let viewPath = "";
+
+  switch (service) {
+    case "resize":
+      viewPath = path.join(__dirname, "./client/views/resize.html");
+      break;
+    case "convert":
+      viewPath = path.join(__dirname, "views/convert.html");
+      break;
+    default:
+      viewPath = path.join(__dirname, "index.html");
+  }
+
+  mainWindow.loadFile(viewPath);
+});
 
 // const menu = [
 //   ...(isMac
@@ -93,6 +99,27 @@ app.whenReady().then(() => {
 //       ]
 //     : []),
 // ];
+
+ipcMain.on("select-service", (event, service) => {
+  let viewPath, htmlContent;
+
+  switch (service) {
+    case "resize":
+      viewPath = path.join(__dirname, "./client/views/resize.html");
+      htmlContent = fs.readFileSync(viewPath, "utf-8");
+      event.reply("update-view", htmlContent);
+      break;
+    case "convert":
+      viewPath = path.join(__dirname, "./client/views/convert.html");
+      htmlContent = fs.readFileSync(viewPath, "utf-8");
+      event.reply("update-view", htmlContent);
+      break;
+    default:
+      viewPath = path.join(__dirname, "./client/views/index.html");
+      htmlContent = fs.readFileSync(viewPath, "utf-8");
+      event.reply("update-view", htmlContent);
+  }
+});
 
 app.on("window-all-closed", () => {
   if (!isMac) {
