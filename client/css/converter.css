@@ -1,6 +1,6 @@
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #f0f4f8;
+  background-color: #0f766e; /* Use the main background color from style.css */
   margin: 0;
   display: flex;
   align-items: center;
@@ -12,47 +12,118 @@ body {
   display: none;
 }
 
+#parentContainer {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 #filesContainer {
-  max-width: 400px;
-  width: 100%;
-  padding: 16px;
+  width: 32rem;
+  padding: 1rem;
   background-color: #ffffff;
-  border-radius: 8px;
+  border-radius: 0.375rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .fileBox {
-  margin-bottom: 12px;
+  margin-bottom: 1rem; /* Adjust margin as needed */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
+  padding: 0.5rem; /* Adjust padding as needed */
+  border: 1px solid #3490dc; /* Use the border color from style.css */
+  border-radius: 0.375rem;
   background-color: #edf2f7;
 }
 
 .fileName {
   flex-grow: 1;
-  margin-right: 8px;
+  margin-right: 0.5rem; /* Adjust margin as needed */
+  color: #2d3748; /* Use the text color from style.css */
 }
 
 .removeButton {
   background-color: #e53e3e;
   color: white;
-  padding: 4px 8px;
+  padding: 0.25rem 0.5rem; /* Adjust padding as needed */
   border: none;
-  border-radius: 4px;
+  border-radius: 0.375rem;
   cursor: pointer;
 }
 
 #convertButton {
-  margin-top: 16px;
-  background-color: #4299e1;
+  margin: 1rem;
+  margin-top: 1.5rem;
+  background-color: #0f766e;
   color: white;
-  padding: 8px 16px;
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 0.375rem;
   cursor: pointer;
+  font-size: 15px;
+  width: 20%;
+}
+
+.select-files {
+  color: #6b7280;
+  cursor: pointer;
+  font-size: 28px;
+}
+
+#goBackButton {
+  background-color: #333333;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 15px;
+  margin-top: 3.5rem;
+}
+
+#goBackButton:hover {
+  background-color: #555555;
+}
+
+.file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #edf2f7; /* Adjust background color as needed */
+  border: 1px solid #3490dc; /* Adjust border color as needed */
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem; 
+  margin-top: 1rem;
+  overflow: hidden;
+}
+
+.file p {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-grow: 1;
+}
+
+.remove-file-btn {
+  background-color: #e53e3e;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 14px; /* Adjust font size as needed */
+  margin-left: 0.5rem; /* Adjust margin as needed */
+}
+
+.remove-file-btn:hover {
+  background-color: #c53030; /* Adjust hover background color as needed */
 }

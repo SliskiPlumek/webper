@@ -8,14 +8,18 @@
     <link rel="stylesheet" href="../css/converter.css">
 </head>
 <body>
-    <input type="file" id="fileInput" multiple>
-    <div id="filesContainer">
-        <label for="fileInput">
-            <div style="cursor: pointer;">Select Files</div>
-        </label>
-        <div id="fileList"></div>
-        <button id="convertButton">Convert</button>
+    <div id="parentContainer">
+        <div id="filesContainer">
+            <input type="file" id="fileInput" multiple>
+            <label for="fileInput">
+                <div class="select-files">Select Files</div>
+            </label>
+            <div id="fileList"></div>
+            <button id="convertButton">Convert</button>
+        </div>
+        <button id="goBackButton">Go Back ⮪</button>
     </div>
     <script src="../js/script.js"></script>
+    <script src="../js/viewRouter.js"></script>
 </body>
 </html>

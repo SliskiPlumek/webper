@@ -51,10 +51,13 @@ ipcMain.on("select-service", (event, service) => {
       viewPath = path.join(__dirname, "./client/views/resize.html");
       break;
     case "convert":
-      viewPath = path.join(__dirname, "views/convert.html");
+      viewPath = path.join(__dirname, "./client/views/convert.html");
+      break;
+    case "menu": 
+      viewPath = path.join(__dirname, "./client/views/index.html");
       break;
     default:
-      viewPath = path.join(__dirname, "index.html");
+      viewPath = path.join(__dirname, "./client/views/index.html");
   }
 
   mainWindow.loadFile(viewPath);
