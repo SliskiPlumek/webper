@@ -31,11 +31,10 @@ function createMainWindow() {
 app.whenReady().then(() => {
   createMainWindow();
 
-  
-  // const mainMenu = Menu.buildFromTemplate(menu)
-  
+  // const mainMenu = Menu.buildFromTemplate(menu);
+
   mainWindow.on("closed", () => (mainWindow = null));
-  
+
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createMainWindow();
@@ -53,7 +52,7 @@ ipcMain.on("select-service", (event, service) => {
     case "convert":
       viewPath = path.join(__dirname, "./client/views/convert.html");
       break;
-    case "menu": 
+    case "menu":
       viewPath = path.join(__dirname, "./client/views/index.html");
       break;
     default:
@@ -63,45 +62,21 @@ ipcMain.on("select-service", (event, service) => {
   mainWindow.loadFile(viewPath);
 });
 
-// const menu = [
-//   ...(isMac
-//     ? [
-//         {
-//           label: app.name,
-//           submenu: [
-//             {
-//               label: "About",
-//               click: createAboutWindow,
-//             },
-//           ],
-//         },
-//       ]
-//     : []),
-//   {
-//     role: "fileMenu", // basicly this same, except of shortcut
-//     // label: 'File',
-//     // submenu: [
-//     //   {
-//     //     label: "Quit",
-//     //     click: () => app.quit(),
-//     //     accelerator: 'CmdOrCtrl+W'
-//     //   }
-//     // ]
-//   },
-//   ...(!isMac
-//     ? [
-//         {
-//           label: "Help",
-//           submenu: [
-//             {
-//               label: "About",
-//               click: createAboutWindow,
-//             },
-//           ],
-//         },
-//       ]
-//     : []),
-// ];
+const menu = [
+  // zostawić view i file reszta ryn
+  // ...(isMac ? [] : []),
+  // {
+  //   role: "fileMenu", // basicly this same, except of shortcut
+  //   label: "File",
+  //   submenu: [
+  //     {
+  //       label: "Quit",
+  //       click: () => app.quit(),
+  //       accelerator: "CmdOrCtrl+W",
+  //     },
+  //   ],
+  // },
+];
 
 ipcMain.on("select-service", (event, service) => {
   let viewPath, htmlContent;
