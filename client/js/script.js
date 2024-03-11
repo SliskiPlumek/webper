@@ -1,17 +1,27 @@
 const fileInput = document.getElementById("fileInput");
-const filesList = document.getElementById("fileList")
+const filesList = document.getElementById("fileList");
 
 let filesArray = [];
 
 function handleFiles() {
-  console.log('handling files...');
+  console.log("handling files...");
   const files = fileInput.files;
   const formData = new FormData();
 
   if (files) {
     for (let i = 0; i < files.length; i++) {
-      const fileId = generateFileId();
       const file = files[i];
+      const existingSameFile = filesArray.some(
+        (sameFile) => sameFile.name === file.name
+      );
+
+      if (existingSameFile) {
+        console.log("Existing file!");
+        console.log(filesArray);
+        return false;
+      }
+
+      const fileId = generateFileId();
       file.id = fileId;
 
       const allowedFormats = [
@@ -64,7 +74,7 @@ function handleFileElement(file) {
   const deleteBtn = document.createElement("button");
   deleteBtn.setAttribute("name", "close-outline");
   deleteBtn.classList.add("remove-file-btn");
-  deleteBtn.innerHTML = "✕"
+  deleteBtn.innerHTML = "✕";
   fileDiv.appendChild(deleteBtn);
 
   // Append the fileDiv to the desired container (e.g., body)

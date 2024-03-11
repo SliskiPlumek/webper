@@ -1,5 +1,5 @@
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: #0f766e; /* Use the main background color from style.css */
   margin: 0;
   display: flex;
@@ -94,13 +94,9 @@ body {
 
 .file {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #edf2f7; /* Adjust background color as needed */
-  border: 1px solid #3490dc; /* Adjust border color as needed */
-  border-radius: 0.375rem;
+  align-items: center; /* Adjust background color as needed */ /* Adjust border color as needed */
   padding: 0.5rem;
-  margin-bottom: 0.5rem; 
+  margin-bottom: 0.5rem;
   margin-top: 1rem;
   overflow: hidden;
 }
@@ -110,7 +106,6 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  flex-grow: 1;
 }
 
 .remove-file-btn {
