@@ -31,7 +31,8 @@ function createMainWindow() {
 app.whenReady().then(() => {
   createMainWindow();
 
-  // const mainMenu = Menu.buildFromTemplate(menu);
+  const mainMenu = Menu.buildFromTemplate(menu);
+  Menu.setApplicationMenu(mainMenu)
 
   mainWindow.on("closed", () => (mainWindow = null));
 
@@ -63,19 +64,57 @@ ipcMain.on("select-service", (event, service) => {
 });
 
 const menu = [
-  // zostawić view i file reszta ryn
-  // ...(isMac ? [] : []),
-  // {
-  //   role: "fileMenu", // basicly this same, except of shortcut
-  //   label: "File",
-  //   submenu: [
-  //     {
-  //       label: "Quit",
-  //       click: () => app.quit(),
-  //       accelerator: "CmdOrCtrl+W",
-  //     },
-  //   ],
-  // },
+  ...(isMac
+    ? [
+        {
+          label: app.name,
+          submenu: [
+            {
+              label: 'About',
+              click: createAboutWindow,
+            },
+          ],
+        },
+      ]
+    : []),
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'Quit',
+        click: () => app.quit(),
+        accelerator: 'CmdOrCtrl+W',
+      },
+    ],
+  },
+  {
+    label: 'App',
+    submenu: [
+      {
+        label: 'Refresh',
+        click: () => {
+          const focusedWindow = BrowserWindow.getFocusedWindow()
+          focusedWindow.reload()
+        },
+        accelerator: 'CmdOrCtrl+R'
+      },
+      {
+        label: "Toggle Dev Tools",
+        click: () => {
+          const focusedWindow = BrowserWindow.getFocusedWindow()
+          focusedWindow.webContents.openDevTools()
+        },
+        accelerator: "CmdOrCtrl+Shift+I"
+      },
+      {
+        label: "Toggle Full Screen",
+        click: () => {
+          const focusedWindow = BrowserWindow.getFocusedWindow()
+          focusedWindow.fullScreen = !focusedWindow.fullScreen
+        }
+      }
+    ],
+  },
 ];
 
 ipcMain.on("select-service", (event, service) => {
