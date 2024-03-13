@@ -1,5 +1,6 @@
 const fileInput = document.getElementById("fileInput");
 const filesList = document.getElementById("fileList");
+const convertSubmitBtn = document.getElementById("convertButton");
 
 let filesArray = [];
 
@@ -47,6 +48,21 @@ function handleFiles() {
     }
     return;
   }
+}
+
+async function submitConvert() {
+  console.log(filesArray);
+
+  // Notify the main process to start the conversion
+  filesArray.forEach((file) => {
+    ipcRenderer.send("submit-convert", file.path);
+  });
+
+  // Listen for the conversion completion event from the main process
+  ipcRenderer.on("convert-complete", () => {
+    console.log("File conversion complete!");
+    // Additional logic to handle conversion completion in the renderer process
+  });
 }
 
 function generateFileId() {
@@ -110,3 +126,4 @@ function handleFileElement(file) {
 }
 
 fileInput.addEventListener("input", (e) => handleFiles(e));
+convertSubmitBtn.addEventListener("click", (e) => submitConvert(e));
