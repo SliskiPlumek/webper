@@ -18,7 +18,7 @@ function handleFiles() {
       if (existingSameFile) {
         console.log("Existing file!");
         console.log(filesArray);
-        return false;
+        continue; // Continue to the next file if a file with the same name exists
       }
 
       const fileId = generateFileId();
@@ -45,7 +45,6 @@ function handleFiles() {
       console.log(filesArray);
       handleFileElement(file);
     }
-    return;
   }
 }
 
@@ -61,14 +60,40 @@ function handleFileElement(file) {
   fileDiv.setAttribute("data-file-id", file.id);
 
   // Create and append the first paragraph
-  const firstParagraph = document.createElement("p");
-  firstParagraph.textContent = `${filesArray.indexOf(file) + 1}. `;
-  fileDiv.appendChild(firstParagraph);
+  const numberParagraph = document.createElement("p");
+  numberParagraph.textContent = `${filesArray.indexOf(file) + 1}. `;
+  fileDiv.appendChild(numberParagraph);
 
   // Create and append the second paragraph with the file name
-  const secondParagraph = document.createElement("p");
-  secondParagraph.textContent = `${file.name}`;
-  fileDiv.appendChild(secondParagraph);
+  const nameParagraph = document.createElement("p");
+  nameParagraph.textContent = `${file.name}`;
+  fileDiv.appendChild(nameParagraph);
+
+  const widthLabel = document.createElement('label')
+  widthLabel.setAttribute("for", "width")
+  widthLabel.textContent = 'w:'
+  fileDiv.appendChild(widthLabel)
+  
+  // Create and append input elements for width and height
+  const widthInput = document.createElement("input");
+  widthInput.setAttribute("type", "number");
+  widthInput.setAttribute("name", "width");
+  widthInput.classList.add("dimension-input");
+  fileDiv.appendChild(widthInput);
+  
+  const separatingParagraph = document.createElement("p")
+  fileDiv.appendChild(separatingParagraph)
+
+  const heightLabel = document.createElement('label')
+  heightLabel.setAttribute("for", "height")
+  heightLabel.textContent = 'h:'
+  fileDiv.appendChild(heightLabel)
+
+  const heightInput = document.createElement("input");
+  heightInput.setAttribute("type", "number");
+  heightInput.setAttribute("name", "height");
+  heightInput.classList.add("dimension-input");
+  fileDiv.appendChild(heightInput);
 
   // Create and append the ion-icon for file removal
   const deleteBtn = document.createElement("button");
@@ -77,10 +102,10 @@ function handleFileElement(file) {
   deleteBtn.innerHTML = "✕";
   fileDiv.appendChild(deleteBtn);
 
-  // Append the fileDiv to the desired container (e.g., body)
+  // Append the fileDiv to the desired container
   filesList.appendChild(fileDiv);
 
-  // Add an event listener to the ion-icon for removing the file
+  // Add an event listener to the delete button for removing the file
   deleteBtn.addEventListener("click", (e) => {
     const clickedElement = e.target;
 
@@ -93,20 +118,13 @@ function handleFileElement(file) {
       const fileId = fileDiv.getAttribute("data-file-id");
 
       // Remove the fileDiv from the DOM
-      const fileElements = filesList?.getElementsByClassName("file");
-      while (fileElements.length > 0) {
-        filesList?.removeChild(fileElements[0]);
-      }
+      filesList.removeChild(fileDiv);
 
       // Remove the corresponding file from the filesArray based on fileId
       const updatedFilesArray = filesArray.filter((file) => file.id !== fileId);
       filesArray = updatedFilesArray;
-
-      filesArray.forEach((file) => {
-        handleFileElement(file);
-      });
     }
   });
 }
 
-fileInput.addEventListener("input", (e) => handleFiles(e));
+fileInput.addEventListener("change", handleFiles);
