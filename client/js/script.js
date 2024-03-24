@@ -1,5 +1,6 @@
 const fileInput = document.getElementById("fileInput");
 const filesList = document.getElementById("fileList");
+const convertSubmitBtn = document.getElementById("convertButton");
 
 let filesArray = [];
 
@@ -40,12 +41,41 @@ function handleFiles() {
         return;
       }
 
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+          const width = img.naturalWidth;
+          const height = img.naturalHeight;
+          console.log("Width:", width);
+          console.log("Height:", height);
+          // Now you can set the width and height input values or do whatever you want with them
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+
       formData.append("files", file);
       filesArray.push(file);
       console.log(filesArray);
       handleFileElement(file);
     }
   }
+}
+
+async function submitConvert() {
+  console.log(filesArray);
+
+  // Notify the main process to start the conversion
+  filesArray.forEach((file) => {
+    ipcRenderer.send("submit-convert", file.path);
+  });
+
+  // Listen for the conversion completion event from the main process
+  ipcRenderer.on("convert-complete", () => {
+    console.log("File conversion complete!");
+    // Additional logic to handle conversion completion in the renderer process
+  });
 }
 
 function generateFileId() {
@@ -123,8 +153,16 @@ function handleFileElement(file) {
       // Remove the corresponding file from the filesArray based on fileId
       const updatedFilesArray = filesArray.filter((file) => file.id !== fileId);
       filesArray = updatedFilesArray;
+
+      // Update file number paragraphs
+      const fileElements = document.querySelectorAll(".file");
+      fileElements.forEach((fileDiv, index) => {
+        const numberParagraph = fileDiv.querySelector("p");
+        numberParagraph.textContent = `${index + 1}. `;
+      });
     }
   });
 }
 
-fileInput.addEventListener("change", handleFiles);
+fileInput.addEventListener("input", (e) => handleFiles(e));
+convertSubmitBtn.addEventListener("click", (e) => submitConvert(e));

@@ -119,26 +119,26 @@ const menu = [
   },
 ];
 
-// ipcMain.on("select-service", (event, service) => {
-//   let viewPath, htmlContent;
+ipcMain.on("select-service", (event, service) => {
+  let viewPath, htmlContent;
 
-//   switch (service) {
-//     case "resize":
-//       viewPath = path.join(__dirname, "./client/views/resize.html");
-//       htmlContent = fs.readFileSync(viewPath, "utf-8");
-//       event.reply("update-view", htmlContent);
-//       break;
-//     case "convert":
-//       viewPath = path.join(__dirname, "./client/views/convert.html");
-//       htmlContent = fs.readFileSync(viewPath, "utf-8");
-//       event.reply("update-view", htmlContent);
-//       break;
-//     default:
-//       viewPath = path.join(__dirname, "./client/views/index.html");
-//       htmlContent = fs.readFileSync(viewPath, "utf-8");
-//       event.reply("update-view", htmlContent);
-//   }
-// });
+  switch (service) {
+    case "resize":
+      viewPath = path.join(__dirname, "./client/views/resize.html");
+      htmlContent = fs.readFileSync(viewPath, "utf-8");
+      event.reply("update-view", htmlContent);
+      break;
+    case "convert":
+      viewPath = path.join(__dirname, "./client/views/convert.html");
+      htmlContent = fs.readFileSync(viewPath, "utf-8");
+      event.reply("update-view", htmlContent);
+      break;
+    default:
+      viewPath = path.join(__dirname, "./client/views/index.html");
+      htmlContent = fs.readFileSync(viewPath, "utf-8");
+      event.reply("update-view", htmlContent);
+  }
+});
 
 // Function to convert a single file to WebP format
 const convertFiles = async (filePath) => {
@@ -164,20 +164,16 @@ function createWebperFolder() {
 
   return webperFolderPath;
 }
+console.log("sth");
 
 ipcMain.on("submit-convert", async (event, filePath) => {
-  // Assuming you have a function to handle file conversion in your main process
-  // Modify this according to your actual conversion logic
   try {
     await convertFiles(filePath);
 
-    // Get the output directory
     const outputDir = createWebperFolder();
 
-    // Open the file explorer window at the output directory
     shell.showItemInFolder(outputDir);
 
-    // Notify the renderer process that the conversion is complete
     event.reply("convert-complete");
     console.log('"works"');
   } catch (error) {
