@@ -1,3 +1,4 @@
+require('dotenv').config()
 const path = require("node:path");
 const os = require("os");
 const fs = require("fs");
@@ -22,9 +23,9 @@ function createMainWindow() {
     },
   });
 
-  if (isDev) {
-    mainWindow.webContents.openDevTools();
-  }
+  // if (isDev) {
+  //   mainWindow.webContents.openDevTools();
+  // }
 
   mainWindow.loadFile(path.join(__dirname, "./client/views/index.html"));
 }
