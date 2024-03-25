@@ -7,7 +7,6 @@ let width;
 let height;
 
 function handleFiles() {
-  console.log("handling files...");
   const files = fileInput.files;
   const formData = new FormData();
 
@@ -19,8 +18,6 @@ function handleFiles() {
       );
 
       if (existingSameFile) {
-        console.log("Existing file!");
-        console.log(filesArray);
         continue;
       }
 
@@ -49,11 +46,8 @@ function handleFiles() {
         img.onload = function () {
           file.width = img.naturalWidth;
           file.height = img.naturalHeight;
-          console.log("Width:", width);
-          console.log("Height:", height);
           formData.append("files", file);
           filesArray.push(file);
-          console.log(filesArray);
           handleFileElement(file);
         };
         img.src = e.target.result;
@@ -64,9 +58,6 @@ function handleFiles() {
 }
 
 async function submitConvert() {
-  console.log(filesArray);
-
-  // Notify the main process to start the conversion
   filesArray.forEach((file) => {
     const fileData = {
       path: file.path,
@@ -75,14 +66,12 @@ async function submitConvert() {
     };
     ipcRenderer.send("submit-convert", fileData);
   });
-  // Listen for the conversion completion event from the main process
+
   ipcRenderer.on("convert-complete", () => {
-    console.log("File conversion complete!");
     fileInput.value = "";
     const fileDivElements = document.querySelectorAll(".file");
     filesArray = [];
     fileDivElements.forEach((elemnet) => elemnet.remove());
-    // Additional logic to handle conversion completion in the renderer process
   });
 }
 
@@ -97,12 +86,10 @@ function handleFileElement(file) {
   fileDiv.classList.add("file");
   fileDiv.setAttribute("data-file-id", file.id);
 
-  // Create and append the first paragraph
   const numberParagraph = document.createElement("p");
   numberParagraph.textContent = `${filesArray.indexOf(file) + 1}. `;
   fileDiv.appendChild(numberParagraph);
 
-  // Create and append the second paragraph with the file name
   const nameParagraph = document.createElement("p");
   nameParagraph.textContent = `${file.name}`;
   fileDiv.appendChild(nameParagraph);
@@ -112,7 +99,6 @@ function handleFileElement(file) {
   widthLabel.textContent = "w:";
   fileDiv.appendChild(widthLabel);
 
-  // Create and append input elements for width and height
   const widthInput = document.createElement("input");
   widthInput.setAttribute("type", "number");
   widthInput.setAttribute("name", "width");
@@ -135,36 +121,27 @@ function handleFileElement(file) {
   fileDiv.appendChild(heightInput);
   heightInput.value = file.height;
 
-  // Create and append the ion-icon for file removal
+
   const deleteBtn = document.createElement("button");
   deleteBtn.setAttribute("name", "close-outline");
   deleteBtn.classList.add("remove-file-btn");
   deleteBtn.innerHTML = "✕";
   fileDiv.appendChild(deleteBtn);
 
-  // Append the fileDiv to the desired container
   filesList.appendChild(fileDiv);
 
-  // Add an event listener to the delete button for removing the file
   deleteBtn.addEventListener("click", (e) => {
     const clickedElement = e.target;
 
-    // Check if the clicked element has the 'remove-file-btn' class
     if (clickedElement.classList.contains("remove-file-btn")) {
-      // Find the parent fileDiv element
       const fileDiv = clickedElement.closest(".file");
-
-      // Get the data-file-id attribute value
       const fileId = fileDiv.getAttribute("data-file-id");
 
-      // Remove the fileDiv from the DOM
       filesList.removeChild(fileDiv);
 
-      // Remove the corresponding file from the filesArray based on fileId
       const updatedFilesArray = filesArray.filter((file) => file.id !== fileId);
       filesArray = updatedFilesArray;
 
-      // Update file number paragraphs
       const fileElements = document.querySelectorAll(".file");
       fileElements.forEach((fileDiv, index) => {
         const numberParagraph = fileDiv.querySelector("p");

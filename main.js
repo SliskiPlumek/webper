@@ -155,7 +155,6 @@ const convertFiles = async (filePath, width, height) => {
       })
       .toFormat("webp")
       .toFile(outputFile);
-    console.log(`${filePath} converted to WebP: ${outputFile}`);
   } catch (error) {
     console.error(`Error converting ${filePath} to WebP:`, error);
   }
@@ -181,13 +180,9 @@ ipcMain.on("submit-convert", async (event, { path, width, height }) => {
     shell.showItemInFolder(outputDir);
 
     event.reply("convert-complete");
-    console.log('"works"');
   } catch (error) {
     console.log(error);
   }
-  // console.log(path);
-  // console.log(width);
-  // console.log(height);
 });
 
 app.on("window-all-closed", () => {
