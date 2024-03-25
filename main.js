@@ -103,7 +103,7 @@ const menu = [
         label: "Toggle Dev Tools",
         click: () => {
           const focusedWindow = BrowserWindow.getFocusedWindow();
-          focusedWindow.webContents.openDevTools();
+          focusedWindow.webContents.toggleDevTools();
         },
         accelerator: "CmdOrCtrl+Shift+I",
       },
@@ -141,13 +141,20 @@ ipcMain.on("select-service", (event, service) => {
 });
 
 // Function to convert a single file to WebP format
-const convertFiles = async (filePath) => {
+const convertFiles = async (filePath, width, height) => {
   try {
     const outputFile = path.join(
       createWebperFolder(),
       `${path.parse(filePath).name}.webp`
     );
-    await sharp(filePath).toFormat("webp").toFile(outputFile);
+    await sharp(filePath)
+      .resize({
+        width: width,
+        height: height,
+        fit: "inside", // or any other fit mode as per your requirement
+      })
+      .toFormat("webp")
+      .toFile(outputFile);
     console.log(`${filePath} converted to WebP: ${outputFile}`);
   } catch (error) {
     console.error(`Error converting ${filePath} to WebP:`, error);
@@ -164,11 +171,10 @@ function createWebperFolder() {
 
   return webperFolderPath;
 }
-console.log("sth");
 
-ipcMain.on("submit-convert", async (event, filePath) => {
+ipcMain.on("submit-convert", async (event, { path, width, height }) => {
   try {
-    await convertFiles(filePath);
+    await convertFiles(path, width, height);
 
     const outputDir = createWebperFolder();
 
@@ -179,6 +185,9 @@ ipcMain.on("submit-convert", async (event, filePath) => {
   } catch (error) {
     console.log(error);
   }
+  // console.log(path);
+  // console.log(width);
+  // console.log(height);
 });
 
 app.on("window-all-closed", () => {

@@ -3,6 +3,8 @@ const filesList = document.getElementById("fileList");
 const convertSubmitBtn = document.getElementById("convertButton");
 
 let filesArray = [];
+let width;
+let height;
 
 function handleFiles() {
   console.log("handling files...");
@@ -19,7 +21,7 @@ function handleFiles() {
       if (existingSameFile) {
         console.log("Existing file!");
         console.log(filesArray);
-        continue; // Continue to the next file if a file with the same name exists
+        continue;
       }
 
       const fileId = generateFileId();
@@ -42,23 +44,21 @@ function handleFiles() {
       }
 
       const reader = new FileReader();
-      reader.onload = function (e) {
+      reader.onload = function async(e) {
         const img = new Image();
         img.onload = function () {
-          const width = img.naturalWidth;
-          const height = img.naturalHeight;
+          file.width = img.naturalWidth;
+          file.height = img.naturalHeight;
           console.log("Width:", width);
           console.log("Height:", height);
-          // Now you can set the width and height input values or do whatever you want with them
+          formData.append("files", file);
+          filesArray.push(file);
+          console.log(filesArray);
+          handleFileElement(file);
         };
         img.src = e.target.result;
       };
       reader.readAsDataURL(file);
-
-      formData.append("files", file);
-      filesArray.push(file);
-      console.log(filesArray);
-      handleFileElement(file);
     }
   }
 }
@@ -68,12 +68,20 @@ async function submitConvert() {
 
   // Notify the main process to start the conversion
   filesArray.forEach((file) => {
-    ipcRenderer.send("submit-convert", file.path);
+    const fileData = {
+      path: file.path,
+      width: file.width,
+      height: file.height,
+    };
+    ipcRenderer.send("submit-convert", fileData);
   });
-
   // Listen for the conversion completion event from the main process
   ipcRenderer.on("convert-complete", () => {
     console.log("File conversion complete!");
+    fileInput.value = "";
+    const fileDivElements = document.querySelectorAll(".file");
+    filesArray = [];
+    fileDivElements.forEach((elemnet) => elemnet.remove());
     // Additional logic to handle conversion completion in the renderer process
   });
 }
@@ -99,31 +107,33 @@ function handleFileElement(file) {
   nameParagraph.textContent = `${file.name}`;
   fileDiv.appendChild(nameParagraph);
 
-  const widthLabel = document.createElement('label')
-  widthLabel.setAttribute("for", "width")
-  widthLabel.textContent = 'w:'
-  fileDiv.appendChild(widthLabel)
-  
+  const widthLabel = document.createElement("label");
+  widthLabel.setAttribute("for", "width");
+  widthLabel.textContent = "w:";
+  fileDiv.appendChild(widthLabel);
+
   // Create and append input elements for width and height
   const widthInput = document.createElement("input");
   widthInput.setAttribute("type", "number");
   widthInput.setAttribute("name", "width");
   widthInput.classList.add("dimension-input");
   fileDiv.appendChild(widthInput);
-  
-  const separatingParagraph = document.createElement("p")
-  fileDiv.appendChild(separatingParagraph)
+  widthInput.value = file.width;
 
-  const heightLabel = document.createElement('label')
-  heightLabel.setAttribute("for", "height")
-  heightLabel.textContent = 'h:'
-  fileDiv.appendChild(heightLabel)
+  const separatingParagraph = document.createElement("p");
+  fileDiv.appendChild(separatingParagraph);
+
+  const heightLabel = document.createElement("label");
+  heightLabel.setAttribute("for", "height");
+  heightLabel.textContent = "h:";
+  fileDiv.appendChild(heightLabel);
 
   const heightInput = document.createElement("input");
   heightInput.setAttribute("type", "number");
   heightInput.setAttribute("name", "height");
   heightInput.classList.add("dimension-input");
   fileDiv.appendChild(heightInput);
+  heightInput.value = file.height;
 
   // Create and append the ion-icon for file removal
   const deleteBtn = document.createElement("button");
@@ -161,6 +171,13 @@ function handleFileElement(file) {
         numberParagraph.textContent = `${index + 1}. `;
       });
     }
+  });
+  widthInput.addEventListener("input", (e) => {
+    file.width = parseInt(e.target.value);
+  });
+
+  heightInput.addEventListener("input", (e) => {
+    file.height = parseInt(e.target.value);
   });
 }
 
