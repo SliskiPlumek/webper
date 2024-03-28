@@ -1,20 +1,20 @@
-require('dotenv').config()
+require("dotenv").config();
 const path = require("node:path");
 const os = require("os");
 const fs = require("fs");
 const { app, BrowserWindow, Menu, ipcMain, shell } = require("electron");
-const resizeImg = require("resize-img");
 const sharp = require("sharp");
+const { ChildProcess } = require("node:child_process");
 
 const isMac = process.platform === "darwin";
-const isDev = process.env !== "production";
+const isDev = process.env.NODE_ENV !== "production";
 
 let mainWindow;
 
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     title: "Webper",
-    width: isDev ? 1000 : 500,
+    width: 1000,
     height: 600,
     webPreferences: {
       contextIsolation: true,
@@ -23,9 +23,9 @@ function createMainWindow() {
     },
   });
 
-  // if (isDev) {
-  //   mainWindow.webContents.openDevTools();
-  // }
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
 
   mainWindow.loadFile(path.join(__dirname, "./client/views/index.html"));
 }
@@ -141,7 +141,6 @@ ipcMain.on("select-service", (event, service) => {
   }
 });
 
-// Function to convert a single file to WebP format
 const convertFiles = async (filePath, width, height) => {
   try {
     const outputFile = path.join(
@@ -152,7 +151,7 @@ const convertFiles = async (filePath, width, height) => {
       .resize({
         width: width,
         height: height,
-        fit: "inside", // or any other fit mode as per your requirement
+        fit: "inside",
       })
       .toFormat("webp")
       .toFile(outputFile);
@@ -189,5 +188,6 @@ ipcMain.on("submit-convert", async (event, { path, width, height }) => {
 app.on("window-all-closed", () => {
   if (!isMac) {
     app.quit;
+    process.exit();
   }
 });

@@ -26,15 +26,11 @@
   },
   "homepage": "https://github.com/SliskiPlumek/webper#readme",
   "devDependencies": {
-    "dotenv": "^16.4.5",
     "electron": "^29.1.0"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "npm": "^10.5.0",
-    "resize-img": "^2.0.0",
     "sharp": "^0.33.3"
-  },
-  "env": {
-    "NODE_ENV": "production"
   }
 }

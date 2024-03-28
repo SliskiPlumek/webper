@@ -34,7 +34,7 @@ function handleFiles() {
 
       if (!allowedFormats.includes(file.type)) {
         alert(
-          `Nie prawidłowy format pliku: ${file.name}. Wybierz poprawny format lub zapakuj plik do .zip.`
+          `Invalid image type: ${file.name}. Please select files with extensions: .avif, .jpg, png, .gif.`
         );
         fileInput.value = "";
         return;
@@ -120,7 +120,6 @@ function handleFileElement(file) {
   heightInput.classList.add("dimension-input");
   fileDiv.appendChild(heightInput);
   heightInput.value = file.height;
-
 
   const deleteBtn = document.createElement("button");
   deleteBtn.setAttribute("name", "close-outline");
