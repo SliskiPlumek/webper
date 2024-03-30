@@ -15,6 +15,7 @@ It simplifies the process of converting and resizing images, making it accessibl
 ![Static Badge](https://img.shields.io/badge/JavaScript-f7df1e?style=for-the-badge&logo=javascript&labelColor=black&link=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript)
 ![Static Badge](https://img.shields.io/badge/npm-cc0000?style=for-the-badge&logo=npm&labelColor=black&link=https%3A%2F%2Fwww.npmjs.com)
 ![Static Badge](https://img.shields.io/badge/Node.js-539e43?style=for-the-badge&logo=node.js&labelColor=black&link=https%3A%2F%2Fnodejs.org%2Fen)
+![Static Badge](https://img.shields.io/badge/sharp-99cc00?style=for-the-badge&logo=sharp&labelColor=black&link=https%3A%2F%2Fsharp.pixelplumbing.com)
 
 ## Features
 
@@ -34,7 +35,7 @@ Then unpack the **Webper.exe** file, open it and proceed with instalations instr
 2. Add images you want to process using the file picker.
 3. Select the dimensions of your image or, if you want to bypass this feature, leave it as is.
 4. Click the "Convert" button to start processing the images.
-5. Once the processing is complete, the optimized images will be saved to the /webper, which will pop up in explorer after successfull convertion.
+5. Once the processing is complete, the optimized images will be saved to default windows images location under /webper, which will pop up in file explorer after successfull convertion.
 
 ## License
 
