@@ -10,6 +10,12 @@ Webper is a versatile image processing tool designed to help you optimize and co
 "Webper utilizes the [Sharp](https://www.npmjs.com/package/sharp) library, an API designed for image conversion and resizing. Webper serves as a graphical user interface (GUI) for utilizing the functionality provided by the Sharp library. 
 It simplifies the process of converting and resizing images, making it accessible to users without requiring them to interact directly with the library's API."
 
+## Technologies used
+![Static Badge](https://img.shields.io/badge/Electron-9feaf9?style=for-the-badge&logo=electron&logoColor=9feaf9&labelColor=black&link=https%3A%2F%2Fwww.electronjs.org)
+![Static Badge](https://img.shields.io/badge/JavaScript-f7df1e?style=for-the-badge&logo=javascript&labelColor=black&link=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript)
+![Static Badge](https://img.shields.io/badge/npm-cc0000?style=for-the-badge&logo=npm&labelColor=black&link=https%3A%2F%2Fwww.npmjs.com)
+![Static Badge](https://img.shields.io/badge/Node.js-539e43?style=for-the-badge&logo=node.js&labelColor=black&link=https%3A%2F%2Fnodejs.org%2Fen)
+
 ## Features
 
 - **Image Compression**: Reduce image file sizes without compromising visual quality, making your web pages load faster.
