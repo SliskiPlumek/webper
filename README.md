@@ -2,6 +2,7 @@
 ![GitHub Release](https://img.shields.io/github/v/release/SliskiPlumek/webper)
 ![Static Badge](https://img.shields.io/badge/platform-windows-blue)
 ![Downloads](https://img.shields.io/github/downloads/SliskiPlumek/webper/total)
+![GitHub License](https://img.shields.io/github/license/SliskiPlumek/webper)
 
 Webper is a versatile image processing tool designed to help you optimize and convert images efficiently for web usage. With Webper, you can resize, compress, and convert images to .webp format, ensuring optimal performance and visual quality for your web projects.
 
