@@ -30,6 +30,7 @@ function handleFiles() {
         "image/avif", // .avif
         "image/gif", // .gif
         "image/jpg", // .jpg
+        "image/webp"
       ];
 
       if (!allowedFormats.includes(file.type)) {
@@ -63,6 +64,7 @@ async function submitConvert() {
       path: file.path,
       width: file.width,
       height: file.height,
+      format: file.format
     };
     ipcRenderer.send("submit-convert", fileData);
   });
@@ -121,6 +123,28 @@ function handleFileElement(file) {
   fileDiv.appendChild(heightInput);
   heightInput.value = file.height;
 
+  // Create Choose Format field
+  const formatLabel = document.createElement("label");
+  formatLabel.setAttribute("for", "format");
+  formatLabel.textContent = "Format:";
+  fileDiv.appendChild(formatLabel);
+
+  const formatSelect = document.createElement("select");
+  formatSelect.setAttribute("name", "format");
+  formatSelect.classList.add("format-select");
+  fileDiv.appendChild(formatSelect);
+
+  // Add options to the select field
+  const formats = ["WEBP", "AVIF"];
+  formats.forEach((format) => {
+    const option = document.createElement("option");
+    option.value = format.toLowerCase();
+    option.textContent = format;
+    formatSelect.appendChild(option);
+  });
+
+  file.format = formatSelect.value
+
   const deleteBtn = document.createElement("button");
   deleteBtn.setAttribute("name", "close-outline");
   deleteBtn.classList.add("remove-file-btn");
@@ -128,6 +152,11 @@ function handleFileElement(file) {
   fileDiv.appendChild(deleteBtn);
 
   filesList.appendChild(fileDiv);
+
+  formatSelect.addEventListener('change', (e) => {
+    const selectedFormat = e.target.value;
+    file.format = selectedFormat;
+  });
 
   deleteBtn.addEventListener("click", (e) => {
     const clickedElement = e.target;
@@ -148,6 +177,7 @@ function handleFileElement(file) {
       });
     }
   });
+
   widthInput.addEventListener("input", (e) => {
     file.width = parseInt(e.target.value);
   });
@@ -157,5 +187,5 @@ function handleFileElement(file) {
   });
 }
 
-fileInput.addEventListener("input", (e) => handleFiles(e));
+fileInput.addEventListener("change", (e) => handleFiles(e));
 convertSubmitBtn.addEventListener("click", (e) => submitConvert(e));

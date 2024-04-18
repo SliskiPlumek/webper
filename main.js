@@ -141,22 +141,34 @@ ipcMain.on("select-service", (event, service) => {
   }
 });
 
-const convertFiles = async (filePath, width, height) => {
+const convertFiles = async (filePath, width, height, format) => {
   try {
     const outputFile = path.join(
       createWebperFolder(),
-      `${path.parse(filePath).name}.webp`
+      `${path.parse(filePath).name}.${format === 'avif' ? 'avif' : 'webp'}`
     );
-    await sharp(filePath)
-      .resize({
-        width: width,
-        height: height,
-        fit: "inside",
-      })
-      .toFormat("webp")
-      .toFile(outputFile);
+
+    let sharpInstance = sharp(filePath).resize({
+      width: width,
+      height: height,
+      fit: "inside",
+    });
+
+    if (format === 'avif') {
+      sharpInstance = sharpInstance.avif({
+        quality: 50,
+        lossless: false,
+        effort: 4,
+        chromaSubsampling: '4:4:4',
+        bitdepth: 8
+      });
+    } else {
+      sharpInstance = sharpInstance.toFormat(format);
+    }
+
+    await sharpInstance.toFile(outputFile);
   } catch (error) {
-    console.error(`Error converting ${filePath} to WebP:`, error);
+    console.error(`Error converting ${filePath} occurred:`, error);
   }
 };
 
@@ -171,9 +183,9 @@ function createWebperFolder() {
   return webperFolderPath;
 }
 
-ipcMain.on("submit-convert", async (event, { path, width, height }) => {
+ipcMain.on("submit-convert", async (event, { path, width, height, format }) => {
   try {
-    await convertFiles(path, width, height);
+    await convertFiles(path, width, height, format);
 
     const outputDir = createWebperFolder();
 
