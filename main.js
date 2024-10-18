@@ -70,12 +70,7 @@ const menu = [
     ? [
         {
           label: app.name,
-          submenu: [
-            {
-              label: "About",
-              click: createAboutWindow,
-            },
-          ],
+          submenu: [],
         },
       ]
     : []),
